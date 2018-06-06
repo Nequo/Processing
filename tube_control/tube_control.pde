@@ -1,3 +1,5 @@
+int currentCarriage = 0;
+
 private class Seat{
     int x;
     boolean locked;
@@ -21,23 +23,43 @@ private class Seat{
     }
 }
 
-Seat[] seats = new Seat[30];
+private class Carriage{
+    Seat[] seats = new Seat[30];
+    int carriageNo;
+    public Carriage(int carriageNo){
+        create_seats(0);
+        create_seats(15);
+    }
+
+    void create_seats(int index){
+        int start_x = 100;
+        for(int sets = 0; sets < 3; sets ++){
+            for(int seatNo = 0; seatNo < 5; seatNo ++){
+               seats[index] = new Seat(start_x, 40);
+               index++;
+               start_x += 40;
+            }
+            start_x += 100;
+        }
+    }
+    public Seat[] getSeats(){
+        return this.seats;
+    }
+}
+
+//Seat[] seats = new Seat[30];
+Carriage[] carriages = new Carriage[2];
+Carriage carriage0 = new Carriage(0);
+Carriage carriage1 = new Carriage(1);
+carriages[0] = carriage0;
+carriages[1] = carriage1;
+
 
 void draw_tube(){
     rect(50, 100, 900, 300);
 }
 
-void create_seats(int index){
-    int start_x = 100;
-    for(int sets = 0; sets < 3; sets ++){
-        for(int seatNo = 0; seatNo < 5; seatNo ++){
-           seats[index] = new Seat(start_x, 40);
-           index++;
-           start_x += 40;
-        }
-        start_x += 100;
-    }
-}
+Seat[] seats = carriages[currentCarriage].getSeats();
 
 void draw_seat(int seat_number){
     if(seats[seat_number].isLocked()){
@@ -78,6 +100,7 @@ void mousePressed() {
   print("\n");
   int row;
   int seatNumber = 0;
+  Seat[] seats = currentCarriage.getSeats();
   if(mouseY < 140 && mouseY > 100){
      row = 1; 
      print("Row 1 \n");
@@ -95,8 +118,5 @@ void mousePressed() {
            seats[seatCount].changeStatus();
        }
      }
-  }
-  for(int i = 0; i < 30; i++){
-    draw_seat(i);
   }
 }
